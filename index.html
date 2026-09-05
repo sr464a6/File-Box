@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FileBox</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="app">
+
+  <!-- Mobile top bar -->
+  <header class="topbar">
+    <button id="menuToggle" class="icon-btn" aria-label="Buka menu">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+    <span class="brand-name">FileBox</span>
+    <button class="icon-btn" id="searchToggle" aria-label="Cari file">
+      <i class="fa-solid fa-magnifying-glass"></i>
+    </button>
+  </header>
+
+  <!-- Sidebar (garis 3 / menu list) -->
+  <aside class="sidebar" id="sidebar">
+    <span class="brand-name desktop-only">FileBox</span>
+
+    <nav class="nav-scroll">
+      <ul id="navList" class="nav-list">
+        <!-- system items: Home, Semua File, Favorit, Compress -->
+      </ul>
+    </nav>
+
+    <button id="addNavBtn" class="add-nav-btn">
+      <i class="fa-solid fa-plus"></i>
+      <span>Tambah Kategori</span>
+    </button>
+
+    <div class="storage-widget">
+      <div class="storage-label">
+        <span>Penyimpanan</span>
+        <span id="storageText">0 MB</span>
+      </div>
+      <div class="storage-bar"><div id="storageFill" class="storage-fill"></div></div>
+    </div>
+  </aside>
+
+  <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+  <!-- Main content -->
+  <main class="main">
+
+    <div class="main-header">
+      <div>
+        <h1 id="viewTitle">Beranda</h1>
+        <p id="viewSubtitle" class="muted">File yang baru-baru ini dibuka</p>
+      </div>
+      <div class="main-actions">
+        <div class="search-box desktop-only">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="searchInput" placeholder="Cari file...">
+        </div>
+        <button class="btn btn-primary" id="uploadBtn">
+          <i class="fa-solid fa-upload"></i> Tambah File
+        </button>
+        <input type="file" id="fileInput" multiple hidden>
+      </div>
+    </div>
+
+    <div id="dropHint" class="drop-hint">
+      <i class="fa-solid fa-cloud-arrow-up"></i>
+      <p>Tarik &amp; lepas file di sini, atau tekan "Tambah File"</p>
+    </div>
+
+    <section id="fileGrid" class="file-grid"></section>
+
+    <!-- Compress / Convert view -->
+    <section id="compressView" class="compress-view hidden">
+      <div class="convert-card">
+        <div class="convert-icon"><i class="fa-solid fa-file-zipper"></i></div>
+        <h2>Konversi PDF &amp; Word</h2>
+        <p class="muted">Ubah dokumen PDF ke Word, atau sebaliknya. Diproses langsung di browser kamu.</p>
+
+        <div class="convert-direction">
+          <button class="dir-btn active" data-dir="pdf2word">
+            <i class="fa-solid fa-file-pdf"></i>
+            <span>PDF</span>
+          </button>
+          <i class="fa-solid fa-arrow-right-arrow-left swap-icon"></i>
+          <button class="dir-btn" data-dir="word2pdf">
+            <i class="fa-solid fa-file-word"></i>
+            <span>Word</span>
+          </button>
+        </div>
+
+        <label class="convert-drop" id="convertDrop">
+          <i class="fa-solid fa-file-arrow-up"></i>
+          <span id="convertDropText">Pilih atau taruh file di sini</span>
+          <input type="file" id="convertInput" hidden>
+        </label>
+
+        <div id="convertFileInfo" class="convert-file-info hidden">
+          <i class="fa-solid fa-file"></i>
+          <span id="convertFileName"></span>
+          <button id="convertRemove" class="icon-btn small"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+
+        <button id="convertBtn" class="btn btn-primary btn-block" disabled>
+          <i class="fa-solid fa-bolt"></i> Konversi Sekarang
+        </button>
+
+        <div id="convertStatus" class="convert-status"></div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- Glass dock: kategori buatan user, icon only, draggable -->
+<div class="dock-wrap">
+  <ul id="dockList" class="dock-glass"></ul>
+</div>
+
+<!-- Add Navbar Modal -->
+<div class="modal-backdrop" id="navModalBackdrop">
+  <div class="modal">
+    <h3>Kategori Baru</h3>
+    <p class="muted">Ketik nama kategori, ikon dipilih otomatis sesuai kata kunci. Muncul di dock bawah.</p>
+    <input type="text" id="navNameInput" placeholder="mis. IT, Foto, Musik, Invoice..." maxlength="24">
+    <div class="icon-preview">
+      <div class="icon-preview-box"><i id="navIconPreview" class="fa-solid fa-folder"></i></div>
+      <span id="navIconLabel" class="muted">Ikon otomatis</span>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" id="navModalCancel">Batal</button>
+      <button class="btn btn-primary" id="navModalSave">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- File preview modal -->
+<div class="modal-backdrop" id="fileModalBackdrop">
+  <div class="modal file-modal">
+    <div class="file-modal-head">
+      <i id="fileModalIcon" class="fa-solid fa-file"></i>
+      <div>
+        <h3 id="fileModalName">nama-file.pdf</h3>
+        <span id="fileModalMeta" class="muted">0 KB</span>
+      </div>
+      <button class="icon-btn" id="fileModalClose"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="file-modal-actions">
+      <button class="btn btn-ghost" id="fileModalFav"><i class="fa-regular fa-star"></i> Favorit</button>
+      <a class="btn btn-ghost" id="fileModalDownload" download><i class="fa-solid fa-download"></i> Unduh</a>
+      <button class="btn btn-ghost danger" id="fileModalDelete"><i class="fa-solid fa-trash"></i> Hapus</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
