@@ -1,54 +1,55 @@
-# 📦 **File Box**
+# 📦 File Box
 
-A **simple and modern file management application** designed to make managing files easy, fast, and organized.
+A lightweight, modern web-based file management interface designed for fast and intuitive local file organization.
 
-## ✨ **Features**
+---
 
-* **📁 Upload and manage files**
-* **🗂️ Organize files easily**
-* **🔍 Search and browse files**
-* **🗑️ Delete unwanted files**
-* **📱 Responsive design**
-* **⚡ Simple and fast interface**
+## 📑 Table of Contents
 
-## 🛠️ **Built With**
+- [Overview](#-overview)
+- [Key Features](#-key-features)
+- [Tech Stack](#-tech-stack)
+- [Getting Started](#-getting-started)
+- [Project Structure](#-project-structure)
+- [Roadmap](#-roadmap)
+- [Contributing](#-contributing)
+- [License](#-license)
 
-* **HTML**
-* **CSS**
-* **JavaScript**
+---
 
-## 🚀 **Getting Started**
+## 🌟 Overview
 
-### **1. Clone the repository**
+**File Box** provides a clean, clutter-free dashboard to preview, organize, and manage files directly in the browser. Built purely with vanilla web technologies, it serves as a lightweight starter template or a foundation for full-stack cloud storage implementations.
 
-```bash
-git clone https://github.com/sr464a6/File-Box.git
-```
+---
 
-### **2. Open the project**
+## ✨ Key Features
 
-```bash
-cd File-Box
-```
+- **📁 File Upload & Preview:** Add files instantly with drag-and-drop or standard file picker.
+- **🗂️ Intuitive Organization:** Keep track of documents, images, and media in an organized layout.
+- **🔍 Quick Search:** Filter and locate files in real time without page reloads.
+- **🗑️ File Deletion:** Remove unneeded files with one-click actions.
+- **📱 Responsive Layout:** Optimized for desktop, tablet, and mobile screens.
+- **⚡ Zero Dependencies:** Built with pure vanilla web standards for instant loading.
 
-### **3. Run the application**
+---
 
-**Open `index.html` in your browser**, or use a local development server such as **Live Server**.
+## 🛠️ Tech Stack
 
-## 📂 **Project Structure**
+- **HTML5:** Semantic markup and file input handling.
+- **CSS3:** Responsive flexbox/grid layout and modern UI styling.
+- **JavaScript (ES6+):** Dynamic DOM manipulation, file reading, and state handling.
 
-```text
-File-Box/
-├── index.html
-├── style.css
-├── script.js
-└── assets/
-```
+---
 
-## 🎯 **Purpose**
+## 🚀 Getting Started
 
-**File Box** was created as a simple file management project with a **clean and user-friendly interface**. It can also serve as a foundation for building a more advanced **file storage system**.
+### Prerequisites
 
-## 📄 **License**
+You only need a modern web browser (Chrome, Firefox, Safari, Edge).
 
-This project is **open source** and available for **personal and educational use**.
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone [https://github.com/sr464a6/File-Box.git](https://github.com/sr464a6/File-Box.git)
