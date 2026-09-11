@@ -1,41 +1,41 @@
-# 📦 <strong>File Box</strong>
+# 📦 **File Box**
 
-A <strong>simple and modern file management application</strong> designed to make managing files easy, fast, and organized.
+A **simple and modern file management application** designed to make managing files easy, fast, and organized.
 
-## ✨ <strong>Features</strong>
+## ✨ **Features**
 
-* <strong>📁 Upload and manage files</strong>
-* <strong>🗂️ Organize files easily</strong>
-* <strong>🔍 Search and browse files</strong>
-* <strong>🗑️ Delete unwanted files</strong>
-* <strong>📱 Responsive design</strong>
-* <strong>⚡ Simple and fast interface</strong>
+* **📁 Upload and manage files**
+* **🗂️ Organize files easily**
+* **🔍 Search and browse files**
+* **🗑️ Delete unwanted files**
+* **📱 Responsive design**
+* **⚡ Simple and fast interface**
 
-## 🛠️ <strong>Built With</strong>
+## 🛠️ **Built With**
 
-* <strong>HTML</strong>
-* <strong>CSS</strong>
-* <strong>JavaScript</strong>
+* **HTML**
+* **CSS**
+* **JavaScript**
 
-## 🚀 <strong>Getting Started</strong>
+## 🚀 **Getting Started**
 
-### <strong>1. Clone the repository</strong>
+### **1. Clone the repository**
 
 ```bash
 git clone https://github.com/sr464a6/File-Box.git
 ```
 
-### <strong>2. Open the project</strong>
+### **2. Open the project**
 
 ```bash
 cd File-Box
 ```
 
-### <strong>3. Run the application</strong>
+### **3. Run the application**
 
-Open <strong>index.html</strong> in your browser, or use a local development server such as <strong>Live Server</strong>.
+**Open `index.html` in your browser**, or use a local development server such as **Live Server**.
 
-## 📂 <strong>Project Structure</strong>
+## 📂 **Project Structure**
 
 ```text
 File-Box/
@@ -45,10 +45,10 @@ File-Box/
 └── assets/
 ```
 
-## 🎯 <strong>Purpose</strong>
+## 🎯 **Purpose**
 
-<strong>File Box</strong> was created as a simple file management project with a <strong>clean and user-friendly interface</strong>. It can also serve as a foundation for building a more advanced <strong>file storage system</strong>.
+**File Box** was created as a simple file management project with a **clean and user-friendly interface**. It can also serve as a foundation for building a more advanced **file storage system**.
 
-## 📄 <strong>License</strong>
+## 📄 **License**
 
-This project is <strong>open source</strong> and available for <strong>personal and educational use</strong>.
+This project is **open source** and available for **personal and educational use**.
