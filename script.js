@@ -4,9 +4,7 @@ const LS_NAV = 'filebox_nav_v1';
 const LS_FILES = 'filebox_files_v1';
 
 /* ============================================================
-   GITHUB DEFAULT FOLDERS
-   Semua folder di root repository akan otomatis menjadi
-   kategori/dock bawaan.
+   GITHUB DEFAULT PDF LIBRARY
    ============================================================ */
 
 const GITHUB_REPO_API =
@@ -15,9 +13,11 @@ const GITHUB_REPO_API =
 const GITHUB_RAW_BASE =
   'https://raw.githubusercontent.com/sr464a6/File-Box/main/';
 
+const GITHUB_PDF_FOLDER = 'pdf';
+
 let githubNavItems = [];
 let githubFiles = [];
-
+ 
 
 /* ---------- Icon auto-detect keywords ---------- */
 
@@ -230,86 +230,148 @@ const searchInput =
   tidak dimasukkan sebagai kategori.
 */
 
+/* ============================================================
+   GITHUB FOLDER LOADER
+   ============================================================ */
+
+/*
+  Struktur repository:
+
+  pdf/
+    cysec/
+    growth/
+    hack/
+    lang/
+    linux/
+    muslim/
+    network/
+    oscp/
+    penetration/
+    wami/
+
+  Setiap folder di dalam pdf/ otomatis menjadi
+  kategori File-Box.
+*/
+
 async function loadGitHubFolders(){
 
   try{
 
-    const response = await fetch(
-      GITHUB_REPO_API,
-      {
-        cache: 'no-store'
-      }
-    );
+    const pdfUrl =
+      GITHUB_REPO_API +
+      encodeURIComponent(GITHUB_PDF_FOLDER);
+
+    const response =
+      await fetch(
+        pdfUrl,
+        {
+          cache: 'no-store'
+        }
+      );
 
     if(!response.ok){
+
       throw new Error(
-        'GitHub API error: ' + response.status
+        'GitHub PDF folder error: ' +
+        response.status
       );
+
     }
 
-    const items = await response.json();
+    const items =
+      await response.json();
 
     if(!Array.isArray(items)){
       return;
     }
 
+    /*
+      Ambil hanya folder di dalam pdf/
+    */
 
-    /* ---------- Ambil folder ---------- */
-
-    const folders = items.filter(
-      item => item.type === 'dir'
-    );
-
-
-    githubNavItems = folders.map(folder => {
-
-      const folderName = folder.name;
-
-      return {
-
-        id: 'github-' + folderName
-          .toLowerCase()
-          .replace(/[^a-z0-9]+/g, '-'),
-
-        label: formatFolderName(folderName),
-
-        icon: detectIcon(folderName),
-
-        system: false,
-
-        github: true,
-
-        githubFolder: folderName
-
-      };
-
-    });
-
+    const folders =
+      items.filter(
+        item =>
+          item.type === 'dir'
+      );
 
     /*
-      Gabungkan kategori GitHub + kategori user.
+      Buat kategori otomatis.
+    */
 
-      GitHub selalu berada di depan.
+    githubNavItems =
+      folders.map(
+        folder => {
+
+          const folderName =
+            folder.name;
+
+          const safeId =
+            folderName
+              .toLowerCase()
+              .replace(
+                /[^a-z0-9]+/g,
+                '-'
+              );
+
+          return {
+
+            id:
+              'github-' +
+              safeId,
+
+            label:
+              formatFolderName(
+                folderName
+              ),
+
+            icon:
+              detectIcon(
+                folderName
+              ),
+
+            system:
+              false,
+
+            github:
+              true,
+
+            githubFolder:
+              folderName,
+
+            githubPath:
+              GITHUB_PDF_FOLDER +
+              '/' +
+              folderName
+
+          };
+
+        }
+      );
+
+    /*
+      Gabungkan dengan kategori buatan user.
     */
 
     mergeNavigation();
 
-
     /*
-      Setelah folder ditemukan,
-      ambil file-file dari setiap folder.
+      Setelah kategori ditemukan,
+      ambil seluruh PDF dari setiap kategori.
     */
 
     await loadGitHubFiles();
 
-
     renderNav();
+
     renderView();
+
+    updateStorageWidget();
 
   }catch(error){
 
     console.error(
-      'Gagal membaca folder GitHub:',
+      'Gagal membaca library PDF GitHub:',
       error
     );
 
@@ -319,8 +381,183 @@ async function loadGitHubFolders(){
 
 
 /* ============================================================
-   FORMAT NAMA FOLDER
+   LOAD PDF DARI GITHUB
    ============================================================ */
+
+async function loadGitHubFiles(){
+
+  githubFiles = [];
+
+  /*
+    Ambil file dari:
+
+    pdf/cysec/
+    pdf/growth/
+    pdf/hack/
+    dst.
+  */
+
+  for(
+    const folder
+    of githubNavItems
+  ){
+
+    try{
+
+      const path =
+        GITHUB_PDF_FOLDER +
+        '/' +
+        folder.githubFolder;
+
+      const url =
+        GITHUB_REPO_API +
+        path
+          .split('/')
+          .map(
+            part =>
+              encodeURIComponent(part)
+          )
+          .join('/');
+
+      const response =
+        await fetch(
+          url,
+          {
+            cache: 'no-store'
+          }
+        );
+
+      if(!response.ok){
+
+        console.error(
+          'Gagal membaca folder GitHub:',
+          path,
+          response.status
+        );
+
+        continue;
+
+      }
+
+      const items =
+        await response.json();
+
+      if(!Array.isArray(items)){
+        continue;
+      }
+
+      /*
+        Hanya masukkan file PDF.
+
+        File lain di folder pdf/
+        tidak dianggap sebagai library PDF.
+      */
+
+      items
+        .filter(
+          item => {
+
+            if(item.type !== 'file'){
+              return false;
+            }
+
+            return (
+              item.name
+                .toLowerCase()
+                .endsWith('.pdf')
+            );
+
+          }
+        )
+        .forEach(
+          item => {
+
+            const rawUrl =
+              GITHUB_RAW_BASE +
+              path
+                .split('/')
+                .map(
+                  part =>
+                    encodeURIComponent(part)
+                )
+                .join('/') +
+              '/' +
+              encodeURIComponent(
+                item.name
+              );
+
+            githubFiles.push({
+
+              id:
+                'github-file-' +
+                item.sha,
+
+              name:
+                item.name,
+
+              size:
+                item.size || 0,
+
+              /*
+                URL PDF asli dari GitHub.
+              */
+
+              data:
+                item.download_url ||
+                rawUrl,
+
+              navId:
+                folder.id,
+
+              fav:
+                false,
+
+              addedAt:
+                Date.now(),
+
+              lastOpened:
+                null,
+
+              github:
+                true,
+
+              githubPath:
+                item.path,
+
+              htmlUrl:
+                item.html_url,
+
+              /*
+                Tandai sebagai default library.
+              */
+
+              defaultFile:
+                true
+
+            });
+
+          }
+        );
+
+    }catch(error){
+
+      console.error(
+        'Gagal membaca folder:',
+        folder.label,
+        error
+      );
+
+    }
+
+  }
+
+  console.log(
+    'GitHub PDF library:',
+    githubFiles.length,
+    'PDF'
+  );
+
+}
 
 function formatFolderName(name){
 
@@ -709,14 +946,15 @@ function renderDock(){
 
 function countForSystem(id){
 
-  if(id === 'home'){
+ if(id === 'home'){
 
-    return Math.min(
-      files.length,
-      12
-    );
+  return Math.min(
+    files.length +
+    githubFiles.length,
+    12
+  );
 
-  }
+}
 
 
   if(id === 'all'){
@@ -1040,62 +1278,69 @@ function renderView(){
 
 
   /* ---------- Home ---------- */
+/* ---------- Home ---------- */
 
-  if(activeNav === 'home'){
+if(activeNav === 'home'){
 
-    viewTitle.textContent =
-      'Beranda';
+  viewTitle.textContent =
+    'Beranda';
 
+  viewSubtitle.textContent =
+    'Library PDF dan file yang baru-baru ini dibuka';
 
-    viewSubtitle.textContent =
-      'File yang baru-baru ini dibuka';
+  /*
+    Gabungkan:
 
+    - file milik user
+    - PDF default dari GitHub
+  */
 
-    list =
-      [
-        ...files
-      ]
+  const allFiles = [
+    ...files,
+    ...githubFiles
+  ];
 
+  /*
+    Tampilkan file yang pernah dibuka.
+  */
+
+  list =
+    allFiles
       .filter(
         f => f.lastOpened
       )
-
       .sort(
         (a,b) =>
           b.lastOpened -
           a.lastOpened
       )
-
       .slice(
         0,
         12
       );
 
+  /*
+    Kalau belum ada yang dibuka,
+    tampilkan file terbaru dari library.
+  */
 
-    if(list.length === 0){
+  if(list.length === 0){
 
-      list =
-        [
-          ...files
-        ]
-
+    list =
+      allFiles
         .sort(
           (a,b) =>
             b.addedAt -
             a.addedAt
         )
-
         .slice(
           0,
           12
         );
 
-    }
-
   }
 
-
-  /* ---------- All ---------- */
+}
 
   else if(activeNav === 'all'){
 
