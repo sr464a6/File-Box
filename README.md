@@ -3,13 +3,11 @@
 # 📦 F I L E · B O X 📦
 ### *The Ultimate AI-Powered Minimalist Ebook & Media Hub*
 
-<img src="https://komarev.com/ghpvc/?username=sr464a6&color=1d4ed8&style=flat-square&label=REPOSITORY+VIEWS" alt="Views" />
-[![Node.js Version](https://img.shields.io/badge/Node.js-%3E%3D18.0.0-blue?style=flat-square&logo=nodedotjs&logoColor=white)](https://nodejs.org/)
-[![Express.js](https://img.shields.io/badge/Express.js-4.x-lightgrey?style=flat-square&logo=express&logoColor=white)](https://expressjs.com/)
-[![SQLite](https://img.shields.io/badge/Database-SQLite3-003B57?style=flat-square&logo=sqlite&logoColor=white)](https://www.sqlite.org/)
-[![Google Gemini AI](https://img.shields.io/badge/AI-Gemini%201.5%20Flash-4285F4?style=flat-square&logo=googlegemini&logoColor=white)](https://aistudio.google.com/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
-
+[![Node.js Version](https://img.shields.io/badge/Node.js-%3E%3D18.0.0-blue?style=for-the-badge&logo=nodedotjs&logoColor=white)](https://nodejs.org/)
+[![Express.js](https://img.shields.io/badge/Express.js-4.x-lightgrey?style=for-the-badge&logo=express&logoColor=white)](https://expressjs.com/)
+[![SQLite](https://img.shields.io/badge/Database-SQLite3-003B57?style=for-the-badge&logo=sqlite&logoColor=white)](https://www.sqlite.org/)
+[![Google Gemini AI](https://img.shields.io/badge/AI-Gemini%201.5%20Flash-4285F4?style=for-the-badge&logo=googlegemini&logoColor=white)](https://aistudio.google.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
 <br>
 
 <img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&customColorList=6,11,20&height=120&section=header&text=Read%20Smart,%20Read%20Deep.&fontSize=28&fontColor=fff&animation=fadeIn" width="100%" />
