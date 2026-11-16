@@ -1,0 +1,141 @@
+<!DOCTYPE html><html lang="id"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FileBox</title><link rel="manifest" href="manifest.json"><meta name="theme-color" content="#0b2a5b"><link rel="icon" href="icon.svg">
+<style>
+:root{--n:#0b2a5b;--n2:#1d4ed8;--l:rgba(11,42,91,.14)}*{box-sizing:border-box}
+body{margin:0;font:15px system-ui,sans-serif;color:var(--n);background:linear-gradient(160deg,#fff,#e6eefb) fixed;min-height:100vh}
+button,input{font:inherit;color:var(--n)}button{background:#fff;border:1px solid var(--l);border-radius:10px;padding:8px 12px;cursor:pointer}
+button.p{background:var(--n);border-color:var(--n);color:#fff}input{background:#fff;border:1px solid var(--l);border-radius:10px;padding:9px;width:100%}
+.hide{display:none!important}#auth{max-width:340px;margin:12vh auto;padding:22px;display:grid;gap:10px;background:#fff;border-radius:18px;box-shadow:0 10px 40px var(--l)}h1{margin:0}
+header{display:flex;gap:8px;align-items:center;padding:10px;position:sticky;top:0;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);z-index:5;border-bottom:1px solid var(--l)}
+main{padding:4px 12px 170px;max-width:900px;margin:auto}#ct{text-align:center;margin:12px 0 6px}.hint{text-align:center;opacity:.55;margin-top:40px}
+.r{display:flex;gap:6px;align-items:center;background:#fff;border:1px solid var(--l);border-radius:12px;padding:8px 10px;margin:6px 0}.r .t{flex:1;cursor:pointer;word-break:break-word}.r small{display:block;opacity:.6;font-size:12px;margin-top:2px}.r button{padding:4px 9px}
+.form{display:grid;gap:10px;background:#fff;border:1px solid var(--l);border-radius:14px;padding:14px}.pv{width:48px;height:48px;border-radius:12px;border:1px solid var(--l);display:flex;align-items:center;justify-content:center;font-size:26px}
+.ic img{width:1em;height:1em;object-fit:cover;border-radius:6px;display:block}
+#nudge{margin:8px 12px;padding:10px;border-radius:12px;background:#e0ecff;display:flex;gap:8px;align-items:center}#nudge span{flex:1;font-size:14px}
+#dr{position:fixed;inset:0;z-index:40;background:rgba(11,42,91,.35)}#dp{width:250px;height:100%;background:#fff;padding:14px;display:grid;gap:8px;align-content:start}#dp button{text-align:left}
+/* nav bawah: kaca transparan (desktop) / busur roda (HP) */
+#glass{position:fixed;left:50%;bottom:14px;transform:translateX(-50%);width:min(760px,94vw);display:flex;align-items:center;gap:6px;padding:8px;z-index:10;background:rgba(255,255,255,.14);backdrop-filter:blur(16px) saturate(1.4);-webkit-backdrop-filter:blur(16px) saturate(1.4);border:1px solid rgba(255,255,255,.55);border-radius:26px;box-shadow:0 8px 32px rgba(11,42,91,.18)}
+#glass .ar{border-radius:50%;width:38px;height:38px;padding:0;flex:none;background:rgba(255,255,255,.5)}#strip{display:flex;gap:8px;overflow:hidden;scroll-behavior:smooth;flex:1}
+.chip{flex:none;width:92px;padding:8px 4px;text-align:center;border-radius:18px;background:rgba(255,255,255,.35);border:1px solid rgba(255,255,255,.6)}.chip .ic{font-size:28px;display:flex;justify-content:center}.chip small{display:block;text-transform:capitalize;font-size:12px}.chip.on{background:var(--n);color:#fff}
+#wheel{position:fixed;left:0;right:0;bottom:0;height:130px;overflow:hidden;touch-action:pan-y;user-select:none;-webkit-user-select:none;z-index:10}
+.ring{position:absolute;left:50%;top:190px;width:330px;height:330px;border-radius:50%;transform:translate(-50%,-50%);border:1px solid rgba(255,255,255,.7);background:rgba(255,255,255,.18);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 0 30px rgba(11,42,91,.15)}
+.wi{position:absolute;left:50%;top:190px;width:48px;height:48px;margin:-24px 0 0 -24px;border-radius:50%;background:rgba(255,255,255,.75);border:1px solid var(--l);display:flex;align-items:center;justify-content:center;font-size:25px}.wi.on{background:var(--n);box-shadow:0 0 0 4px rgba(29,78,216,.25)}
+@media(max-width:700px){#glass{display:none}}@media(min-width:701px){#wheel{display:none}}
+#reader{position:fixed;inset:0;background:#fff;z-index:20;display:flex;flex-direction:column}
+#rb{display:flex;gap:6px;padding:8px;align-items:center;border-bottom:1px solid var(--l)}#rb span{flex:1;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font-weight:600}#rb input{width:56px;text-align:center;padding:6px}
+#pdfw{flex:1;overflow:auto;background:#cbd5e1;text-align:center}
+.fab{position:fixed;right:14px;width:54px;height:54px;border-radius:50%;background:var(--n);color:#fff;font-size:26px;display:flex;align-items:center;justify-content:center;z-index:30;box-shadow:0 4px 16px rgba(11,42,91,.4);touch-action:none;user-select:none;-webkit-user-select:none}
+.fw{position:fixed;right:10px;bottom:150px;width:min(92vw,360px);max-height:60vh;overflow:auto;background:#fff;border:1px solid var(--l);border-radius:16px;box-shadow:0 10px 40px rgba(11,42,91,.3);padding:12px;z-index:31;display:grid;gap:8px}
+#ans{background:#eef3fb;border-radius:10px;padding:8px;white-space:pre-wrap;min-height:50px}#mres{max-height:130px;overflow:auto;display:grid;gap:3px}
+#mres div{padding:5px 8px;border-radius:8px;background:#eef3fb;cursor:pointer;font-size:13px}#mres div.on{background:var(--n);color:#fff}#ytp{width:100%;height:90px;border-radius:10px}
+</style></head><body>
+<div id="auth"><h1>📦 FileBox</h1><p>Perpustakaan ebook pribadimu. Login dulu ya.</p>
+<input id="u" placeholder="Username" autocapitalize="off"><input id="pw" type="password" placeholder="Password (min 6)">
+<button class="p" onclick="auth('login')">Masuk</button><button onclick="auth('register')">Daftar</button><small id="ae" style="color:#dc2626"></small></div>
+<div id="app" class="hide"><header><button onclick="dr.classList.remove('hide')">☰</button><input id="q" placeholder="Cari judul atau isi ebook..." oninput="doSearch()"></header>
+<div id="nudge" class="hide"></div><h3 id="ct"></h3><main id="main"></main>
+<div id="glass"><button class="ar" onclick="strip.scrollBy(-280,0)">◀</button><div id="strip"></div><button class="ar" onclick="strip.scrollBy(280,0)">▶</button></div>
+<div id="wheel"><div class="ring"></div></div></div>
+<div id="dr" class="hide" onclick="if(event.target==dr)dr.classList.add('hide')"><div id="dp"><b>📦 FileBox</b>
+<button data-a="view" data-k="add">➕ Tambah file</button><button data-a="view" data-k="mine">📁 Perpusku</button><button data-a="view" data-k="fav">⭐ Favorit</button><button data-a="view" data-k="hist">🕘 Riwayat baca</button><button onclick="logout()">Keluar</button></div></div>
+<div id="reader" class="hide"><div id="rb"><button onclick="closeR()">✕</button><span id="rt"></span><button onclick="go(-1)">◀</button><input id="pg" type="number" min="1" onchange="showP(+this.value)"><small id="tot"></small><button onclick="go(1)">▶</button>
+<button id="rf" onclick="fav(cur)">☆</button><button onclick="dl(cur)">⬇</button><button onclick="share(cur)">🔗</button></div><div id="pdfw"><canvas id="cv"></canvas></div>
+<div class="fab" id="fm" style="bottom:100px">🎵</div><div class="fab" id="fa2" style="bottom:30px">🤖</div>
+<div class="fw hide" id="wa"><b>🤖 Tanya</b><div style="display:flex;gap:4px"><input id="aq" placeholder="mis. apa itu pivoting?" onkeydown="if(event.key=='Enter')ask()"><button class="p" onclick="ask()">Tanya</button></div><div id="ans"></div></div>
+<div class="fw hide" id="wm"><b>🎵 Musik</b><div style="display:flex;gap:4px"><input id="ms" placeholder="Judul / lirik lagu..." onkeydown="if(event.key=='Enter')msearch()"><button class="p" onclick="msearch()">Cari</button></div>
+<label><input type="checkbox" id="pod" style="width:auto"> Podcast</label><div id="mres"></div><div id="ytp"></div><div style="display:flex;gap:4px"><button onclick="nextS(-1)">⏮</button><button onclick="yp&&(yp.getPlayerState()==1?yp.pauseVideo():yp.playVideo())">⏯</button><button onclick="nextS(1)">⏭</button></div></div></div>
+<script src="vendor/pdf.min.js"></script>
+<script>
+pdfjsLib.GlobalWorkerOptions.workerSrc=location.origin+'/vendor/pdf.worker.min.js';
+if('serviceWorker'in navigator)navigator.serviceWorker.getRegistrations().then(r=>r.forEach(x=>x.unregister()));
+const $=i=>document.getElementById(i),E=s=>String(s??'').replace(/[&<>"']/g,c=>'&#'+c.charCodeAt(0)+';');
+let T=localStorage.ft,lib=[],cats=[],items=[],view='home',sel=null,th=0,cur=null,doc=null,pn=1,ptxt='',st,yp,Q=[],qi=0,tick=null,imgIcon=null,sT;
+const S=JSON.parse(localStorage.st||'{}'),R=150,CY=190;
+const SYM={cysec:'🥷',growth:'🌱',hack:'👨‍💻',lang:'🗣️',linux:'🐧',muslim:'🕌',network:'🌐',oscp:'🎯',penetration:'🔓',wami:'📖',umum:'📚'};
+const AUTO=[[/math|mtk|matem|aljabar/,'➗'],[/fisika|physic/,'⚛️'],[/kimia|chem/,'🧪'],[/bio/,'🧬'],[/ing|english/,'🇬🇧'],[/sejarah|history/,'🏛️'],[/kode|code|program|dev/,'💻'],[/jaringan|network/,'🌐'],[/bisnis|business/,'💼'],[/uang|keuangan|finance/,'💰'],[/musik|music/,'🎵'],[/seni|art|desain|design/,'🎨'],[/agama|islam|muslim/,'🕌'],[/masak|resep|food/,'🍳'],[/sehat|health|medis/,'🩺'],[/hukum|law/,'⚖️'],[/novel|cerita|story/,'📖']];
+const autoIcon=n=>{n=(n||'').toLowerCase();for(const[r,i]of AUTO)if(r.test(n))return i;return SYM[n]||'📁'};
+const ic=i=>/^(data:|https?:)/.test(i)?`<img src="${E(i)}">`:E(i);
+async function api(p,o={}){const r=await fetch('/api/'+p,{...o,headers:{'content-type':'application/json',Authorization:'Bearer '+T,...(o.headers||{})}});
+ if(r.status==401&&T){logout();throw new Error('Login dulu')}const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.error||'Error');return j}
+async function auth(m){try{if('Notification'in window&&Notification.permission=='default')Notification.requestPermission();const j=await api(m,{method:'POST',body:JSON.stringify({username:$('u').value,password:$('pw').value})});T=localStorage.ft=j.token;boot()}catch(e){$('ae').textContent=e.message}}
+function logout(){localStorage.removeItem('ft');localStorage.removeItem('st');T=null;location.reload()}
+async function boot(){if(!T)return;$('auth').classList.add('hide');$('app').classList.remove('hide');await load();
+ if(S.view){view=S.view;sel=S.sel||null;if(view=='cat'&&!items.find(i=>i.id==sel)){view='home';sel=null}build();render()}
+ if(S.open&&lib.find(b=>b.key==S.open))openR(S.open);nudge()}
+async function load(){[lib,cats]=await Promise.all([api('library'),api('cats')]);const m={};lib.forEach(b=>{if(b.cat!='pustakaku')m[b.cat]=null});cats.forEach(c=>m[c.name]=c.icon);
+ items=Object.keys(m).sort((a,b)=>a.localeCompare(b)).map(id=>({id,icon:m[id]||autoIcon(id)}));build();render()}
+const save=()=>localStorage.st=JSON.stringify({view,sel,open:cur});
+function setView(v,s){view=v;sel=s||null;$('q').value='';$('dr').classList.add('hide');save();place();hl();render()}
+/* ---- nav: kaca (desktop) & roda busur (HP) ---- */
+function build(){$('strip').innerHTML=items.map(i=>`<button class="chip" data-a="sel" data-k="${E(i.id)}"><span class="ic">${ic(i.icon)}</span><small>${E(i.id)}</small></button>`).join('');
+ document.querySelectorAll('.wi').forEach(e=>e.remove());items.forEach((i,x)=>{const d=document.createElement('div');d.className='wi ic';d.dataset.i=x;d.innerHTML=ic(i.icon);$('wheel').appendChild(d)});
+ const x=items.findIndex(i=>i.id==sel);th=x>=0?-x*360/items.length:0;place();hl()}
+const hl=()=>document.querySelectorAll('.chip').forEach((c,x)=>c.classList.toggle('on',view=='cat'&&items[x]?.id==sel));
+function place(){const s=360/(items.length||1);document.querySelectorAll('.wi').forEach(e=>{const x=+e.dataset.i,a=x*s+th;e.style.transform=`rotate(${a}deg) translateY(-${R}px) rotate(${-a}deg)`;e.classList.toggle('on',view=='cat'&&items[x].id==sel)})}
+const W=$('wheel');let drag=null;const ang=e=>{const r=W.getBoundingClientRect();return Math.atan2(e.clientY-(r.top+CY),e.clientX-(r.left+r.width/2))*180/Math.PI};
+const nearest=()=>{const n=items.length;return((Math.round(-th/(360/n))%n)+n)%n};
+W.addEventListener('pointerdown',e=>{drag={a:ang(e),m:0,t:e.target.closest('.wi')};W.setPointerCapture(e.pointerId)});
+W.addEventListener('pointermove',e=>{if(!drag)return;const a=ang(e);let d=a-drag.a;if(d>180)d-=360;if(d<-180)d+=360;drag.a=a;drag.m+=Math.abs(d);th+=d;place()});
+W.addEventListener('pointerup',()=>{if(!drag||!items.length)return;const x=drag.m<3&&drag.t?+drag.t.dataset.i:nearest();drag=null;const s=360/items.length;let a=((x*s+th)%360+540)%360-180;th-=a;
+ document.querySelectorAll('.wi').forEach(e=>e.style.transition='transform .3s');setView('cat',items[x].id);setTimeout(()=>document.querySelectorAll('.wi').forEach(e=>e.style.transition='none'),320)});
+/* ---- daftar ---- */
+const byT=(a,b)=>a.title.localeCompare(b.title);
+function row(b,o={}){const k=E(b.key);return `<div class="r"><span class="t" data-a="open" data-k="${k}">${E(b.title)}${o.sub?`<small>${o.sub}</small>`:''}</span>${o.min?'':`<button data-a="fav" data-k="${k}">${b.fav?'⭐':'☆'}</button><button data-a="dl" data-k="${k}">⬇</button>`}${o.del?`<button data-a="del" data-k="${k}">🗑</button>`:''}</div>`}
+const dur=s=>s<60?s+' dtk':Math.round(s/60)+' mnt';
+async function render(){const m=$('main');if($('q').value.trim().length>=2)return;
+ const T0={home:'',add:'➕ Tambah file',mine:'📁 Perpusku',fav:'⭐ Favorit',hist:'🕘 Riwayat baca',cat:(items.find(i=>i.id==sel)?.id||'')};$('ct').textContent=T0[view]||'';
+ if(view=='home'){m.innerHTML='<p class="hint">Pilih kategori di bawah 👇</p>';return}
+ if(view=='add'){addView();return}
+ if(view=='hist'){let h=[];try{h=await api('history')}catch{}m.innerHTML=h.length?h.map(x=>row({key:x.key,title:x.title},{min:1,sub:`hal. ${x.page}/${x.total} · dibuka ${new Date(x.ts).toLocaleString('id-ID',{dateStyle:'medium',timeStyle:'short'})} · lama baca ${dur(x.secs)}`})).join(''):'<p class="hint">Belum ada riwayat.</p>';return}
+ let L=lib.filter(b=>view=='fav'?b.fav:view=='mine'?b.own:b.cat==sel).sort(byT);
+ m.innerHTML=L.length?L.map(b=>row(b,{min:view=='fav',del:view=='mine'&&b.own})).join(''):'<p class="hint">Kosong.</p>'}
+function doSearch(){clearTimeout(sT);const q=$('q').value.trim();if(q.length<2){render();return}
+ sT=setTimeout(async()=>{try{const{r,ready}=await api('search?q='+encodeURIComponent(q));$('ct').textContent='🔎 Hasil';$('main').innerHTML=(ready?'':'<p class="hint">Indeks isi ebook masih disiapkan, hasil bisa belum lengkap…</p>')+(r.length?r.sort(byT).map(b=>row(b,{sub:E(b.snip)})).join(''):'<p class="hint">Tidak ketemu.</p>')}catch(e){$('main').innerHTML='<p class="hint">'+E(e.message)+'</p>'}},300)}
+/* ---- tambah file ---- */
+function addView(){imgIcon=null;$('main').innerHTML=`<div class="form"><input id="fa" type="file" multiple><input id="fc" placeholder="Kategori (mis. math)" oninput="pv()"><div style="display:flex;gap:10px;align-items:center"><div class="pv ic" id="pv">📁</div>
+<input id="fe" placeholder="Emoji ikon (opsional)" oninput="pv()" style="flex:1"></div><label>atau gambar ikon: <input id="fi" type="file" accept="image/*" onchange="pickImg(this.files[0])"></label><button class="p" onclick="saveAdd()">Simpan</button></div>`}
+function pv(){const e=$('fe').value.trim(),n=$('fc').value.trim();$('pv').innerHTML=imgIcon?ic(imgIcon):ic(e||(n?autoIcon(n):'📁'))}
+function pickImg(f){if(!f)return;const i=new Image();i.onload=()=>{const c=document.createElement('canvas');c.width=c.height=64;const x=c.getContext('2d'),s=Math.min(i.width,i.height);x.drawImage(i,(i.width-s)/2,(i.height-s)/2,s,s,0,0,64,64);imgIcon=c.toDataURL('image/png');pv()};i.src=URL.createObjectURL(f)}
+async function saveAdd(){const fs=$('fa').files;if(!fs.length)return alert('Pilih file dulu');const n=$('fc').value.trim().toLowerCase(),e=$('fe').value.trim();
+ try{if(n)await api('cats',{method:'POST',body:JSON.stringify({name:n,icon:imgIcon||e||autoIcon(n)})});const f=new FormData();f.append('cat',n);[...fs].forEach(x=>f.append('files',x));
+ const r=await fetch('/api/upload',{method:'POST',headers:{Authorization:'Bearer '+T},body:f});if(!r.ok)throw new Error('Upload gagal');await load();setView(n?'cat':'mine',n||null)}catch(e){alert(e.message)}}
+/* ---- aksi ---- */
+document.addEventListener('click',e=>{const t=e.target.closest('[data-a]');if(!t)return;const k=t.dataset.k,a=t.dataset.a;if(a=='sel')return setView('cat',k);if(a=='view')return setView(k);({open:openR,fav,dl,share,del})[a](k)});
+async function fav(k){try{await api('fav',{method:'POST',body:JSON.stringify({key:k})});await load();if(cur==k)$('rf').textContent=lib.find(b=>b.key==k)?.fav?'⭐':'☆'}catch(e){alert(e.message)}}
+async function del(k){if(confirm('Hapus file ini?')){await api('file?key='+encodeURIComponent(k),{method:'DELETE'});load()}}
+async function dl(k){try{const r=await fetch('/api/file?dl=1&key='+encodeURIComponent(k),{headers:{Authorization:'Bearer '+T}}),a=document.createElement('a');a.href=URL.createObjectURL(await r.blob());const b=lib.find(x=>x.key==k);a.download=(b?.title||'file')+'.'+(b?.ext||'pdf');a.click()}catch{alert('Unduh gagal')}}
+async function share(k){try{const{url}=await api('share',{method:'POST',body:JSON.stringify({key:k})});const t=lib.find(b=>b.key==k)?.title;
+ if(navigator.share)try{await navigator.share({title:t,url});return}catch{}try{await navigator.clipboard.writeText(url);alert('Link disalin:\n'+url)}catch{prompt('Salin link:',url)}}catch{alert('Share gagal')}}
+/* ---- reader ---- */
+async function openR(k){const b=lib.find(x=>x.key==k)||{key:k,title:'Ebook',page:0};if(b.ext&&b.ext!='pdf')return dl(k);
+ try{const r=await fetch('/api/file?key='+encodeURIComponent(k),{headers:{Authorization:'Bearer '+T}});if(!r.ok)throw new Error('Server balas '+r.status);const buf=new Uint8Array(await r.arrayBuffer());
+  doc=await pdfjsLib.getDocument({data:buf}).promise}catch(e){alert('Gagal membuka PDF: '+e.message);return}
+ cur=k;save();$('reader').classList.remove('hide');$('dr').classList.add('hide');$('rt').textContent=b.title;$('rf').textContent=b.fav?'⭐':'☆';$('ans').textContent='';tick=Date.now();showP(b.page||1)}
+async function showP(n){if(!doc)return;n=Math.max(1,Math.min(doc.numPages,n||1));pn=n;const p=await doc.getPage(n),w=$('pdfw').clientWidth-4,v0=p.getViewport({scale:1}),dpr=Math.min(devicePixelRatio||1,2),sc=Math.min(w/v0.width,2.5),v=p.getViewport({scale:sc*dpr}),c=$('cv');
+ c.width=v.width;c.height=v.height;c.style.width=v0.width*sc+'px';await p.render({canvasContext:c.getContext('2d'),viewport:v}).promise;$('pdfw').scrollTop=0;$('pg').value=n;$('tot').textContent='/ '+doc.numPages;
+ ptxt=(await p.getTextContent()).items.map(i=>i.str).join(' ');clearTimeout(st);st=setTimeout(sendProg,700)}
+const go=d=>showP(pn+d);
+function sendProg(){if(!doc||!cur)return;const b=lib.find(x=>x.key==cur);if(b){b.page=pn;b.total=doc.numPages}const d=tick?Math.min(600,Math.round((Date.now()-tick)/1000)):0;if(tick)tick=Date.now();
+ api('progress',{method:'POST',body:JSON.stringify({key:cur,title:b?.title||'Ebook',page:pn,total:doc.numPages,dsecs:d,snip:ptxt.slice(0,300)})}).catch(()=>{})}
+function closeR(){sendProg();$('reader').classList.add('hide');$('wa').classList.add('hide');$('wm').classList.add('hide');try{yp&&yp.stopVideo()}catch{}doc=null;cur=null;tick=null;save();render()}
+let hid=0;document.addEventListener('visibilitychange',()=>{if(document.hidden){hid=Date.now();sendProg();tick=null}else{if(doc)tick=Date.now();if(hid&&Date.now()-hid>18e5)nudge()}});
+async function ask(){const q=$('aq').value.trim();if(!q)return;$('ans').textContent='Berpikir...';try{$('ans').textContent=(await api('ai',{method:'POST',body:JSON.stringify({q,ctx:ptxt})})).a}catch(e){$('ans').textContent='⚠ '+e.message}}
+/* tombol melayang yang bisa dipindah */
+function dragify(el,win){let s=null;el.addEventListener('pointerdown',e=>{const r=el.getBoundingClientRect();s={x:e.clientX,y:e.clientY,l:r.left,t:r.top,m:0};el.setPointerCapture(e.pointerId)});
+ el.addEventListener('pointermove',e=>{if(!s)return;const dx=e.clientX-s.x,dy=e.clientY-s.y;s.m=Math.max(s.m,Math.abs(dx)+Math.abs(dy));if(s.m>6){el.style.left=Math.max(0,Math.min(innerWidth-54,s.l+dx))+'px';el.style.top=Math.max(0,Math.min(innerHeight-54,s.t+dy))+'px';el.style.right='auto';el.style.bottom='auto'}});
+ el.addEventListener('pointerup',()=>{if(s&&s.m<=6){const w=$(win),o=w.classList.contains('hide');['wa','wm'].forEach(i=>$(i).classList.add('hide'));if(o)w.classList.remove('hide')}s=null})}
+dragify($('fa2'),'wa');dragify($('fm'),'wm');
+/* musik YouTube: cari judul/lirik, lanjut otomatis */
+function loadYT(cb){if(window.YT&&YT.Player)return cb();window.onYouTubeIframeAPIReady=cb;if(!$('yts')){const s=document.createElement('script');s.id='yts';s.src='https://www.youtube.com/iframe_api';document.head.appendChild(s)}}
+async function msearch(){const q=$('ms').value.trim();if(!q)return;$('mres').innerHTML='<div>Mencari...</div>';
+ try{Q=await api('yt?q='+encodeURIComponent(q)+($('pod').checked?'&pod=1':''));$('mres').innerHTML=Q.length?Q.map((v,i)=>`<div data-i="${i}" onclick="playIdx(${i})">${E(v.title)} <small>· ${E(v.by)} ${E(v.len)}</small></div>`).join(''):'<div>Tidak ketemu</div>';if(Q.length)playIdx(0)}catch(e){$('mres').innerHTML='<div>⚠ '+E(e.message)+'</div>'}}
+function playIdx(i){qi=i;document.querySelectorAll('#mres div').forEach(d=>d.classList.toggle('on',+d.dataset.i==i));
+ loadYT(()=>{if(yp&&yp.loadVideoById)yp.loadVideoById(Q[i].id);else yp=new YT.Player('ytp',{height:'90',width:'100%',videoId:Q[i].id,playerVars:{autoplay:1,playsinline:1},events:{onReady:e=>e.target.playVideo(),onStateChange:e=>{if(e.data===0)nextS(1)},onError:()=>nextS(1)}})})}
+function nextS(d){if(Q.length)playIdx((qi+d+Q.length)%Q.length)}
+/* notifikasi ajakan lanjut baca */
+async function nudge(){try{const n=await api('nudge');if(!n||!n.msg)return;const b=$('nudge');b.innerHTML=`<span>📚 ${E(n.msg)}</span><button class="p" data-a="open" data-k="${E(n.key)}">Lanjut</button><button onclick="nudge_x()">✕</button>`;b.classList.remove('hide');
+ if('Notification'in window&&Notification.permission=='granted')new Notification('FileBox 📚',{body:n.msg})}catch{}}
+const nudge_x=()=>$('nudge').classList.add('hide');
+document.addEventListener('click',()=>{if('Notification'in window&&Notification.permission=='default')Notification.requestPermission()},{once:true});
+boot();
+</script></body></html>
